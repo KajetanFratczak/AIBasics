@@ -8,9 +8,9 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.17.3
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+#     display_name: PSI (Python 3.11 CUDA)
 #     language: python
-#     name: python3
+#     name: psi_torch_3.11
 # ---
 
 # %% [markdown]
@@ -54,6 +54,9 @@
 # %%
 # # for conda users
 # # !conda install -y matplotlib pandas pytorch torchvision -c pytorch -c conda-forge
+
+# %%
+# tba
 
 # %% [markdown] id="Othm3C2lLAsj"
 # ## Wprowadzenie
@@ -1326,7 +1329,9 @@ print("Solution is correct!")
 
 # %%
 import time 
-
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
 class CudaMLP(nn.Module):
     def __init__(self, input_size: int, dropout_p: float = 0.5):
@@ -1368,7 +1373,7 @@ model = CudaMLP(X_train.shape[1]).to('cuda')
 optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate, weight_decay=1e-4)
 
 # note that we are using loss function with sigmoid built in
-loss_fn = torch.nn.BCEWithLogitsLoss(pos_weight=torch.from_numpy(weights)[1].to('cuda'))
+loss_fn = torch.nn.BCEWithLogitsLoss(pos_weight=torch.from_numpy(class_weights)[1].to('cuda'))
 
 step_counter = 0
 time_from_eval = time.time()
